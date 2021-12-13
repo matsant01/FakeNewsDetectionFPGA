@@ -16,7 +16,7 @@ calib_corpus=['hous dem aid even see comey letter jason chaffetz tweet', 'flynn 
 onehot_calib=[one_hot(words,voc_size)for words in calib_corpus]
 embedded_calib=pad_sequences(onehot_calib,padding='pre',maxlen=sent_length)
 
-float_model = tf.keras.models.load_model(‘float_model.h5’)
+float_model = tf.keras.models.load_model('float_model.h5')
 quantizer = vitis_quantize.VitisQuantizer(float_model)
 quantized_model = quantizer.quantize_model(calib_dataset=embedded_calib, calib_batch_size=20)
 quantized_model.save('quantized.h5')
