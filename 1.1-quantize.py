@@ -18,8 +18,9 @@ Quantize the floating-point model
 '''
 Author: Mark Harvey
 '''
-
-
+import tensorflow
+from tensorflow.keras.preprocessing.text import one_hot
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 import argparse
 import os
 import shutil
