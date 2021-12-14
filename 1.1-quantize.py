@@ -29,7 +29,7 @@ import sys
 # Silence TensorFlow messages
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
-import tensorflow as tf
+import tensorflow
 import numpy as np
 from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
@@ -76,7 +76,7 @@ def quant_model(batchsize,evaluate):
     print('              1                     \n')
     print('------------------------------------\n')
     # run quantization
-    float_model = load_model('float_model.h5')
+    float_model=keras.models.load_model('Progetto/FakeNewsDetectionFPGA/float_model')
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
