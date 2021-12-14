@@ -75,11 +75,11 @@ def quant_model(batchsize,evaluate):
     print('              1                     \n')
     print('------------------------------------\n')
     # run quantization
-    float_model=keras.models.load_model('/workspace/Progetto/FakeNewsDetectionFPGA/float_model')
+    model=load_model('/workspace/Progetto/FakeNewsDetectionFPGA/float_model.pb')
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
-    quantizer = vitis_quantize.VitisQuantizer(float_model)
+    quantizer = vitis_quantize.VitisQuantizer(model)
     print('------------------------------------\n')
     print('              3                     \n')
     print('------------------------------------\n')
