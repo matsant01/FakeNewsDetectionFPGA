@@ -8,7 +8,7 @@
 
 import pandas as pd
 import tensorflow as tf
-from tensorflow imort keras
+from tensorflow import keras
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
