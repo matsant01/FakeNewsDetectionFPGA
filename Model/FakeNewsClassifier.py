@@ -12,6 +12,7 @@ from tensorflow import keras
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
+from tensorflow_model_optimization.quantization.keras.vitis.layers import vitis_activation
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.text import one_hot
 from tensorflow.keras.layers import Dense
