@@ -53,7 +53,7 @@ for i in range(0, len(messages)):
 
 
 onehot_repr=[one_hot(words,voc_size)for words in corpus]
-sent_length=20
+sent_length=32
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
 dataset=np.array(embedded_docs)
 
