@@ -42,7 +42,7 @@ DIVIDER = '-----------------------------------------'
 
 
 
-def quant_model(float_model,batchsize,evaluate):
+def quant_model(batchsize,evaluate):
     '''
     Quantize the floating-point model
     Save to HDF5 file
@@ -75,7 +75,7 @@ def quant_model(float_model,batchsize,evaluate):
     quant_dataset = embedded_calib
     input_dataset = np.array(embedded_calib)
     # run quantization
-    float_model = tf.keras.models.load_model('float_model.h5')
+    float_model = keras.models.load_model('float_model.h5')
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
@@ -122,7 +122,6 @@ def main():
 
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument('-m', '--float_model',  type=str, default='float_model.h5', help='Full path of floating-point model. Default is build/float_model/k_model.h5')
     ap.add_argument('-b', '--batchsize',    type=int, default=20,                       help='Batchsize for quantization. Default is 50')
     ap.add_argument('-e', '--evaluate',     action='store_true', help='Evaluate floating-point model if set. Default is no evaluation.')
     args = ap.parse_args()
@@ -132,13 +131,12 @@ def main():
     print(sys.version)
     print('------------------------------------')
     print ('Command line options:')
-    print (' --float_model  : ', args.float_model)
     print (' --batchsize    : ', args.batchsize)
     print (' --evaluate     : ', args.evaluate)
     print('------------------------------------\n')
 
 
-    quant_model(args.float_model, args.batchsize, args.evaluate)
+    quant_model(args.batchsize, args.evaluate)
 
 
 if __name__ ==  "__main__":
