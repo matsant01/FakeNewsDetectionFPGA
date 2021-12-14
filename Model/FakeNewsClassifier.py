@@ -40,7 +40,6 @@ voc_size=5000 #vocabulary size
 messages=x.copy()
 messages.reset_index(inplace=True)
 nltk.download('stopwords')
-stemming is the process of reducing words to their word stem, base or root form
 ps = PorterStemmer()
 corpus = []
 for i in range(0, len(messages)):
