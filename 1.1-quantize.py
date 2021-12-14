@@ -30,7 +30,7 @@ import sys
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
 import tensorflow as tf
-import nunmpy as np
+import numpy as np
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
