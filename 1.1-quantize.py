@@ -33,7 +33,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
-from tensorflow.keras.models import load_model
+#from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 
 #from dataset_utils import input_fn_test, input_fn_quant
