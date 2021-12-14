@@ -75,7 +75,7 @@ def quant_model(batchsize,evaluate):
     print('              1                     \n')
     print('------------------------------------\n')
     # run quantization
-    model=load_model("/workspace/Progetto/FakeNewsDetectionFPGA/{float_model.pb}")
+    model=load_model("Vitis-AI/workspace/Progetto/FakeNewsDetectionFPGA")
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
