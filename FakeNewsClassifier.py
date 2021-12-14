@@ -3,14 +3,12 @@
 
 # # Fake News Classifier
 # ## NL1 project - Matteo Santelmo
-# 
+#
 # Dataset: https://www.kaggle.com/c/fake-news/data#
-
-# In[1]:
-
 
 import pandas as pd
 import tensorflow as tf
+from tensorflow imort keras
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import Sequential
@@ -29,9 +27,6 @@ from nltk.corpus import stopwords
 import numpy as np
 
 
-# In[2]:
-
-
 df=pd.read_csv('train.csv') #import dataset
 
 
@@ -45,7 +40,7 @@ df.head()
 
 
 df=df.dropna() #drop missing values (nan values)
-x=df.drop('label',axis=1) #drop also the label 
+x=df.drop('label',axis=1) #drop also the label
 y=df['label'] #the label that tells me wheter the news is fake or not will be the output
 
 
@@ -62,7 +57,7 @@ print("Python -> ",python_version())   # 3.8.12
 voc_size=5000 #vocabulary size
 
 
-# ## Data cleaning  
+# ## Data cleaning
 
 # In[7]:
 
@@ -106,7 +101,7 @@ for i in range(0, len(messages)):
 
 
 # through one hot every word is represented as a number that is specific for that single word
-onehot_repr=[one_hot(words,voc_size)for words in corpus] 
+onehot_repr=[one_hot(words,voc_size)for words in corpus]
 
 
 # ## Creating model
@@ -194,4 +189,3 @@ confusion_matrix(y_test,y_pred)
 
 
 accuracy_score(y_test,y_pred)
-
