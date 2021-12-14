@@ -18,7 +18,7 @@ Quantize the floating-point model
 '''
 Author: Mark Harvey
 '''
-import tensorflow
+import tensorflow as tf
 from tensorflow.keras.preprocessing.text import one_hot
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import argparse
@@ -29,7 +29,6 @@ import sys
 # Silence TensorFlow messages
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
-import tensorflow
 import numpy as np
 from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
