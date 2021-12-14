@@ -7,6 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.text import one_hot
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import os
+import tempfile
 
 sent_length=20
 voc_size=5000
