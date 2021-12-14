@@ -19,5 +19,5 @@ embedded_calib=pad_sequences(onehot_calib,padding='pre',maxlen=sent_length)
 
 float_model = tf.keras.models.load_model('float_model.h5')
 quantizer = vitis_quantize.VitisQuantizer(float_model)
-quantized_model = quantizer.quantize_model(calib_dataset=embedded_calib, include_cle=True, cle_steps=10, calib_batch_size=20)
+quantized_model = quantizer.quantize_model(calib_dataset=embedded_calib, calib_step=None, calib_batch_size=20)
 quantized_model.save('quantized.h5')
