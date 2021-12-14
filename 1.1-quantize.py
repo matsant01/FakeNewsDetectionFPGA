@@ -58,6 +58,10 @@ def quant_model(float_model,batchsize,evaluate):
     #head_tail = os.path.split(quant_model)
     #os.makedirs(head_tail[0], exist_ok = True)
 
+    print('------------------------------------\n')
+    print('              1                     \n')
+    print('------------------------------------\n')
+
     # load the floating point trained model
     float_model = load_model(float_model)
 
@@ -70,8 +74,14 @@ def quant_model(float_model,batchsize,evaluate):
     quant_dataset = embedded_calib
     input_dataset = np.array(embedded_calib)
     # run quantization
+    print('------------------------------------\n')
+    print('              2                     \n')
+    print('------------------------------------\n')
     quantizer = vitis_quantize.VitisQuantizer(float_model)
     quantized_model = quantizer.quantize_model(calib_dataset=quant_dataset)
+    print('------------------------------------\n')
+    print('              3                     \n')
+    print('------------------------------------\n')
 
     # saved quantized model
     quantized_model.save('quantized_model.h5')
