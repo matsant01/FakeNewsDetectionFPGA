@@ -63,7 +63,7 @@ def quant_model(float_model,batchsize,evaluate):
     print('------------------------------------\n')
 
     # load the floating point trained model
-    float_model = load_model(float_model)
+    #float_model = load_model(float_model)
 
     # get input dimensions of the floating-point model
     #height = float_model.input_shape[1]
@@ -77,7 +77,7 @@ def quant_model(float_model,batchsize,evaluate):
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
-    quantizer = vitis_quantize.VitisQuantizer(float_model)
+    quantizer = vitis_quantize.VitisQuantizer('float_model.h5')
     quantized_model = quantizer.quantize_model(calib_dataset=quant_dataset)
     print('------------------------------------\n')
     print('              3                     \n')
