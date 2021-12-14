@@ -164,7 +164,7 @@ model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 # In[24]:
 
 
-model.save('float_model')
+model.save('FakeNewsDetectionFPGA/float_model.h5')
 
 
 # ### Performance Metrics And Accuracy
@@ -186,5 +186,4 @@ confusion_matrix(y_test,y_pred)
 
 # In[23]:
 
-
-accuracy_score(y_test,y_pred)
+print(accuracy_score(y_test,y_pred))
