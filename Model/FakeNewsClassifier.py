@@ -11,6 +11,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Embedding
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow_model_optimization.quantization.keras import vitis_quantize
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.text import one_hot
 from tensorflow.keras.layers import Dense
@@ -110,7 +111,7 @@ onehot_repr=[one_hot(words,voc_size)for words in corpus]
 
 sent_length=20
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
-
+dataset=np.array(embedded_docs)
 
 # In[14]:
 
@@ -164,8 +165,22 @@ model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 # In[24]:
 
 
-model.save('FakeNewsDetectionFPGA/float_model.h5')
-
+model.save('float.h5')
+#model=load_model('float_model.h5')
+print('------------------------------------\n')
+print('              2                     \n')
+print('------------------------------------\n')
+quantizer = vitis_quantize.VitisQuantizer(model)
+print('------------------------------------\n')
+print('              3                     \n')
+print('------------------------------------\n')
+quantized_model = quantizer.quantize_model(calib_dataset=dataset)
+print('------------------------------------\n')
+print('              4                     \n')
+print('------------------------------------\n')
+# saved quantized model
+quantized_model.save('quantized_model.h5')
+print('Saved quantized model to')
 
 # ### Performance Metrics And Accuracy
 
