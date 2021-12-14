@@ -31,6 +31,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
 import tensorflow as tf
 import numpy as np
+from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
@@ -74,13 +75,17 @@ def quant_model(float_model,batchsize,evaluate):
     quant_dataset = embedded_calib
     input_dataset = np.array(embedded_calib)
     # run quantization
+    float_model = tf.keras.models.load_model('float_model.h5')
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
-    quantizer = vitis_quantize.VitisQuantizer('float_model.h5')
-    quantized_model = quantizer.quantize_model(calib_dataset=quant_dataset)
+    quantizer = vitis_quantize.VitisQuantizer(float_model)
     print('------------------------------------\n')
     print('              3                     \n')
+    print('------------------------------------\n')
+    quantized_model = quantizer.quantize_model(calib_dataset=quant_dataset)
+    print('------------------------------------\n')
+    print('              4                     \n')
     print('------------------------------------\n')
 
     # saved quantized model
