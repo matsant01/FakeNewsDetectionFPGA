@@ -20,7 +20,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from platform import python_version
 import nltk
-from keras.utils.vis_utils import plot_model
 import re
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
