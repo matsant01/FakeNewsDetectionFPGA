@@ -33,7 +33,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
-#from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 
 #from dataset_utils import input_fn_test, input_fn_quant
@@ -59,9 +59,6 @@ def quant_model(batchsize,evaluate):
     #head_tail = os.path.split(quant_model)
     #os.makedirs(head_tail[0], exist_ok = True)
 
-    print('------------------------------------\n')
-    print('              1                     \n')
-    print('------------------------------------\n')
 
     # load the floating point trained model
     #float_model = load_model(float_model)
@@ -74,8 +71,12 @@ def quant_model(batchsize,evaluate):
     #quant_dataset = input_fn_quant(tfrec_dir, batchsize, height, width)
     quant_dataset = embedded_calib
     input_dataset = np.array(embedded_calib)
+
+    print('------------------------------------\n')
+    print('              1                     \n')
+    print('------------------------------------\n')
     # run quantization
-    float_model = keras.models.load_model('float_model.h5')
+    float_model = load_model('float_model.h5')
     print('------------------------------------\n')
     print('              2                     \n')
     print('------------------------------------\n')
