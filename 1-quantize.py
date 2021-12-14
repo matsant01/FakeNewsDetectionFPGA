@@ -3,7 +3,6 @@ from tensorflow import keras
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
 from tensorflow_model_optimization.quantization.keras.vitis.layers import vitis_activation
 import numpy
-import tensorflow as tf
 from tensorflow.keras.preprocessing.text import one_hot
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import os
@@ -18,6 +17,9 @@ onehot_calib=[one_hot(words,voc_size)for words in calib_corpus]
 embedded_calib=pad_sequences(onehot_calib,padding='pre',maxlen=sent_length)
 
 float_model = tf.keras.models.load_model('float_model.h5')
+print('A =========================================')
 quantizer = vitis_quantize.VitisQuantizer(float_model)
+print('B =========================================')
 quantized_model = quantizer.quantize_model(calib_dataset=embedded_calib, calib_step=None, calib_batch_size=20)
+print('C =========================================')
 quantized_model.save('quantized.h5')
