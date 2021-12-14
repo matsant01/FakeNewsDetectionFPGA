@@ -30,6 +30,7 @@ import sys
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
 import tensorflow as tf
+import nunmpy as np
 from tensorflow_model_optimization.quantization.keras import vitis_quantize
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
@@ -40,7 +41,7 @@ DIVIDER = '-----------------------------------------'
 
 
 
-def quant_model(float_model,quant_model,batchsize,tfrec_dir,evaluate):
+def quant_model(float_model,batchsize,evaluate):
     '''
     Quantize the floating-point model
     Save to HDF5 file
@@ -54,26 +55,27 @@ def quant_model(float_model,quant_model,batchsize,tfrec_dir,evaluate):
     embedded_calib=pad_sequences(onehot_calib,padding='pre',maxlen=sent_length)
 
     # make folder for saving quantized model
-    head_tail = os.path.split(quant_model)
-    os.makedirs(head_tail[0], exist_ok = True)
+    #head_tail = os.path.split(quant_model)
+    #os.makedirs(head_tail[0], exist_ok = True)
 
     # load the floating point trained model
     float_model = load_model(float_model)
 
     # get input dimensions of the floating-point model
-    height = float_model.input_shape[1]
-    width = float_model.input_shape[2]
+    #height = float_model.input_shape[1]
+    #width = float_model.input_shape[2]
 
     # make TFRecord dataset and image processing pipeline
     #quant_dataset = input_fn_quant(tfrec_dir, batchsize, height, width)
     quant_dataset = embedded_calib
+    input_dataset = np.array(embedded_calib)
     # run quantization
     quantizer = vitis_quantize.VitisQuantizer(float_model)
     quantized_model = quantizer.quantize_model(calib_dataset=quant_dataset)
 
     # saved quantized model
-    quantized_model.save(quant_model)
-    print('Saved quantized model to',quant_model)
+    quantized_model.save('quantized_model.h5')
+    print('Saved quantized model to')
 
 
     if (evaluate):
@@ -106,9 +108,7 @@ def main():
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
     ap.add_argument('-m', '--float_model',  type=str, default='float_model.h5', help='Full path of floating-point model. Default is build/float_model/k_model.h5')
-    ap.add_argument('-q', '--quant_model',  type=str, default='quantized_model.h5', help='Full path of quantized model. Default is build/quant_model/q_model.h5')
     ap.add_argument('-b', '--batchsize',    type=int, default=20,                       help='Batchsize for quantization. Default is 50')
-    ap.add_argument('-tfdir', '--tfrec_dir',type=str, default='build/tfrecords',              help='Full path to folder containing TFRecord files. Default is build/tfrecords')
     ap.add_argument('-e', '--evaluate',     action='store_true', help='Evaluate floating-point model if set. Default is no evaluation.')
     args = ap.parse_args()
 
@@ -118,14 +118,12 @@ def main():
     print('------------------------------------')
     print ('Command line options:')
     print (' --float_model  : ', args.float_model)
-    print (' --quant_model  : ', args.quant_model)
     print (' --batchsize    : ', args.batchsize)
-    print (' --tfrec_dir    : ', args.tfrec_dir)
     print (' --evaluate     : ', args.evaluate)
     print('------------------------------------\n')
 
 
-    quant_model(args.float_model, args.quant_model, args.batchsize, args.tfrec_dir, args.evaluate)
+    quant_model(args.float_model, args.batchsize, args.evaluate)
 
 
 if __name__ ==  "__main__":
