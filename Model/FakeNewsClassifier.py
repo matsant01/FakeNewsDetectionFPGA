@@ -58,18 +58,22 @@ sent_length=32
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
 embedded_docs=embedded_docs/voc_size
 dataset=np.array(embedded_docs[0:128])
-
+print('------------------------------------\n')
+print('    preprocessing completed         \n')
+print('------------------------------------\n')
 embedding_vector_features=64
 model = tf.keras.Sequential([
     #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
     #tf.keras.layers.GlobalMaxPooling1D(),
-    tf.keras.layers.Dense(64, input_shape=(20,), activation='relu'),
+    tf.keras.layers.Dense(20, input_shape=(20,), activation='relu'),
     tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 model.summary()
-
+print('------------------------------------\n')
+print('          model compiled              \n')
+print('------------------------------------\n')
 
 len(embedded_docs),y.shape
 x_final=np.array(embedded_docs)
@@ -79,7 +83,9 @@ y_final=np.array(y)
 #x_final.shape,y_final.shape
 x_train, x_test, y_train, y_test = train_test_split(x_final, y_final, test_size=0.33, random_state=42)
 model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
-
+print('------------------------------------\n')
+print('            model fitted            \n')
+print('------------------------------------\n')
 
 
 model.save('float.h5')
