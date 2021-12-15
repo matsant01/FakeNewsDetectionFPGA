@@ -56,12 +56,14 @@ for i in range(0, len(messages)):
 onehot_repr=[one_hot(words,voc_size)for words in corpus]
 sent_length=32
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
+embedded_docs=embedded_docs/voc_size
 dataset=np.array(embedded_docs[0:128])
 
 embedding_vector_features=64
 model = tf.keras.Sequential([
-    tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
-    tf.keras.layers.GlobalMaxPooling1D(),
+    #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
+    #tf.keras.layers.GlobalMaxPooling1D(),
+    tf.keras.layers.Dense(64, input_shape=(20,), activation='relu'),
     tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
