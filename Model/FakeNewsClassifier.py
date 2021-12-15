@@ -61,16 +61,29 @@ dataset=np.array(embedded_docs[0:128])
 print('------------------------------------\n')
 print('    preprocessing completed         \n')
 print('------------------------------------\n')
-embedding_vector_features=64
-model = tf.keras.Sequential([
-    #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
-    #tf.keras.layers.GlobalMaxPooling1D(),
-    tf.keras.layers.Dense(20, input_shape=(20,), activation='relu'),
-    tf.keras.layers.Dense(20, activation='relu'),
-    tf.keras.layers.Dense(1, activation='sigmoid')
-])
-model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
-model.summary()
+#embedding_vector_features=64
+
+
+model = keras.Model(inputs=inputs, outputs=predictions, name="mnist_model")
+
+
+#model = tf.keras.Sequential([
+#    #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
+#    #tf.keras.layers.GlobalMaxPooling1D(),
+#    tf.keras.layers.Dense(20, input_shape=(20,), activation='relu'),
+#    tf.keras.layers.Dense(20, activation='relu'),
+#    tf.keras.layers.Dense(1, activation='sigmoid')
+#])
+#model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+#model.summary()
+inputs=keras.layers.Input(shape=(20,))
+x=keras.layers.Dense(64,activation='relu')(inputs)
+x=keras.layers.Dense(20,activation='relu')(x)
+x=keras.layers.Dense(1,activation='sigmoid')(x)
+predictions=x
+model=keras.Model(inputs=inputs, outputs=predictions)
+model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy'])
+
 print('------------------------------------\n')
 print('          model compiled              \n')
 print('------------------------------------\n')
