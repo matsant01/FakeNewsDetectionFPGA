@@ -62,11 +62,11 @@ embedding_vector_features=64
 
 
 inputs=keras.layers.Input(shape=(20,))
-    x=keras.layers.Embedding(voc_size,embedding_vector_features, input_length=sent_length)(inputs)
-    x=keras.layers.GlobalMaxPooling1D()(x)
-    x=keras.layers.Dense(20,activation='relu')(x)
-    x=keras.layers.Dense(1,activation='sigmoid')(x)
-    predictions=x
+x=keras.layers.Embedding(voc_size,embedding_vector_features, input_length=sent_length)(inputs)
+x=keras.layers.GlobalMaxPooling1D()(x)
+x=keras.layers.Dense(20,activation='relu')(x)
+x=keras.layers.Dense(1,activation='sigmoid')(x)
+predictions=x
 model=keras.Model(inputs=inputs, outputs=predictions)
 model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy'])
 
