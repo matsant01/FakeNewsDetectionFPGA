@@ -56,8 +56,7 @@ for i in range(0, len(messages)):
 onehot_repr=[one_hot(words,voc_size)for words in corpus]
 sent_length=32
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
-dataset=np.array(embedded_docs)
-
+dataset=np.array(embedded_docs[0:128])
 
 embedding_vector_features=64
 model = tf.keras.Sequential([
@@ -90,13 +89,29 @@ quantizer = vitis_quantize.VitisQuantizer(model)
 print('------------------------------------\n')
 print('              3                     \n')
 print('------------------------------------\n')
-quantized_model = quantizer.quantize_model(calib_dataset=dataset, calib_batch_size=32)
+quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=True, cle_steps=10, include_fast_ft=True)
 print('------------------------------------\n')
 print('              4                     \n')
 print('------------------------------------\n')
 # saved quantized model
 quantized_model.save('quantized_model.h5')
 print('Saved quantized model to')
+print('------------------------------------\n')
+print('              5                     \n')
+print('------------------------------------\n')
+
+quantized_model = keras.models.load_model('quantized.h5')
+
+# Evaluate Quantized Model
+#uantized_model.compile(
+#    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+#    metrics=['sparse_categorical_accuracy'])
+#quantized_model.evaluate(test_images, test_labels, batch_size=500)
+
+# Dump Quantized Model
+#quantizer.dump_model(
+#    quantized_model, dataset=train_images[0:1], dump_float=True)
+
 
 
 #predict_x=model.predict(x_test)
