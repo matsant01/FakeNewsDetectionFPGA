@@ -58,36 +58,18 @@ sent_length=20
 embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix sentences' lentgh
 #embedded_docs=embedded_docs/voc_size
 dataset=np.array(embedded_docs[0:128])
-print('------------------------------------\n')
-print('    preprocessing completed         \n')
-print('------------------------------------\n')
 embedding_vector_features=64
 
 
-
-
-#model = tf.keras.Sequential([
-#    #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
-#    #tf.keras.layers.GlobalMaxPooling1D(),
-#    tf.keras.layers.Dense(20, input_shape=(20,), activation='relu'),
-#    tf.keras.layers.Dense(20, activation='relu'),
-#    tf.keras.layers.Dense(1, activation='sigmoid')
-#])
-#model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
-#model.summary()
 inputs=keras.layers.Input(shape=(20,))
-#x=keras.layers.Dense(64,activation='relu')(inputs)
-x=keras.layers.Embedding(voc_size,embedding_vector_features, input_length=sent_length)(inputs)
-x=keras.layers.GlobalMaxPooling1D()(x)
-x=keras.layers.Dense(20,activation='relu')(x)
-x=keras.layers.Dense(1,activation='sigmoid')(x)
-predictions=x
+    x=keras.layers.Embedding(voc_size,embedding_vector_features, input_length=sent_length)(inputs)
+    x=keras.layers.GlobalMaxPooling1D()(x)
+    x=keras.layers.Dense(20,activation='relu')(x)
+    x=keras.layers.Dense(1,activation='sigmoid')(x)
+    predictions=x
 model=keras.Model(inputs=inputs, outputs=predictions)
 model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy'])
 
-print('------------------------------------\n')
-print('          model compiled              \n')
-print('------------------------------------\n')
 
 len(embedded_docs),y.shape
 x_final=np.array(embedded_docs)
@@ -97,32 +79,30 @@ y_final=np.array(y)
 print(x_final.shape,y_final.shape)
 x_train, x_test, y_train, y_test = train_test_split(x_final, y_final, test_size=0.33, random_state=42)
 model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
+predict_x=model.predict(x_test)
+y_pred=(model.predict(x_test) > 0.5).astype("int32")
 print('------------------------------------\n')
-print('            model fitted            \n')
+print('          Accuracy = ',accuracy_score(y_test,y_pred))
 print('------------------------------------\n')
+
 
 
 model.save('float.h5')
-#model=load_model('float_model.h5')
-print('------------------------------------\n')
-print('              2                     \n')
-print('------------------------------------\n')
 quantizer = vitis_quantize.VitisQuantizer(model)
-print('------------------------------------\n')
-print('              3                     \n')
-print('------------------------------------\n')
 quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=True, cle_steps=10, include_fast_ft=True)
-print('------------------------------------\n')
-print('              4                     \n')
-print('------------------------------------\n')
 # saved quantized model
 quantized_model.save('quantized_model.h5')
-print('Saved quantized model to')
-print('------------------------------------\n')
-print('              5                     \n')
-print('------------------------------------\n')
+print('Saved quantized model')
 
 quantized_model = keras.models.load_model('quantized.h5')
+quantized_model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy'])
+quantized_model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
+predict_x=quantized_model.predict(x_test)
+y_pred=(quantized_model.predict(x_test) > 0.5).astype("int32")
+print('------------------------------------\n')
+print('    Quantized accuracy = ',accuracy_score(y_test,y_pred))
+print('------------------------------------\n')
+
 
 # Evaluate Quantized Model
 #uantized_model.compile(
@@ -136,8 +116,8 @@ quantized_model = keras.models.load_model('quantized.h5')
 
 
 
-#predict_x=model.predict(x_test)
-#y_pred=(model.predict(x_test) > 0.5).astype("int32")
+
+
 #y_pred=np.argmax(model.predict(x_test),axis=1)
 
 #confusion_matrix(y_test,y_pred)
