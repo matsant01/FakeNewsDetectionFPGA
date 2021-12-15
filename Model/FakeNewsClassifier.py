@@ -66,7 +66,7 @@ model = tf.keras.Sequential([
     #tf.keras.layers.Embedding(voc_size,embedding_vector_features,input_length=sent_length),
     #tf.keras.layers.GlobalMaxPooling1D(),
     tf.keras.layers.Dense(20, input_shape=(20,), activation='relu'),
-    tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(20, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')
 ])
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
@@ -80,7 +80,7 @@ x_final=np.array(embedded_docs)
 y_final=np.array(y)
 
 
-#x_final.shape,y_final.shape
+print(x_final.shape,y_final.shape)
 x_train, x_test, y_train, y_test = train_test_split(x_final, y_final, test_size=0.33, random_state=42)
 model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 print('------------------------------------\n')
