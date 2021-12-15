@@ -64,7 +64,6 @@ print('------------------------------------\n')
 #embedding_vector_features=64
 
 
-model = keras.Model(inputs=inputs, outputs=predictions, name="mnist_model")
 
 
 #model = tf.keras.Sequential([
