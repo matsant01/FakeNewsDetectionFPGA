@@ -94,7 +94,7 @@ quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=Tr
 quantized_model.save('quantized_model.h5')
 print('Saved quantized model')
 
-quantized_model = keras.models.load_model('quantized.h5')
+quantized_model = keras.models.load_model(quantized_model)
 quantized_model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy'])
 quantized_model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 predict_x=quantized_model.predict(x_test)
