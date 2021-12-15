@@ -81,13 +81,13 @@ x_train, x_test, y_train, y_test = train_test_split(x_final, y_final, test_size=
 model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 predict_x=model.predict(x_test)
 y_pred=(model.predict(x_test) > 0.5).astype("int32")
-print('------------------------------------\n')
-print('          Accuracy = ',accuracy_score(y_test,y_pred))
-print('------------------------------------\n')
+print('____________________________________________\n')
+print('\n Accuracy = ',accuracy_score(y_test,y_pred))
+print('\n____________________________________________\n')
 
 
 
-model.save('float.h5')
+model.save('float_model.h5')
 quantizer = vitis_quantize.VitisQuantizer(model)
 quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=True, cle_steps=10, include_fast_ft=True)
 # saved quantized model
@@ -99,9 +99,9 @@ quantized_model.compile(optimizer='adam',loss='binary_crossentropy', metrics=['a
 quantized_model.fit(x_train,y_train,validation_data=(x_test,y_test),epochs=10,verbose=2)
 predict_x=quantized_model.predict(x_test)
 y_pred=(quantized_model.predict(x_test) > 0.5).astype("int32")
-print('------------------------------------\n')
-print('    Quantized accuracy = ',accuracy_score(y_test,y_pred))
-print('------------------------------------\n')
+print('____________________________________________\n')
+print('\n Quantized accuracy = ',accuracy_score(y_test,y_pred))
+print('____________________________________________\n')
 
 
 # Evaluate Quantized Model
