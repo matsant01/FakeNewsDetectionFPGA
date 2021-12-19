@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Fake News Classifier
-# ## NL1 project - Matteo Santelmo
+# Fake News Classifier - Without embedding layer
+## NL1 project - Matteo Santelmo
 #
 # Dataset: https://www.kaggle.com/c/fake-news/data#
 
@@ -33,9 +33,10 @@ df.head()
 df=df.dropna() #drop missing values (nan values)
 x=df.drop('label',axis=1) #drop also the label
 y=df['label'] #the label that tells me wheter the news is fake or not will be the output
-print("Tensorflow -> ",tf.__version__) # 2.7.0
-print("Python -> ",python_version())   # 3.8.12
 
+########################
+# DATA PRE-PROCESSING
+########################
 
 voc_size=5000 #vocabulary size
 messages=x.copy()
@@ -60,10 +61,11 @@ embedded_docs=pad_sequences(onehot_repr,padding='pre',maxlen=sent_length) # fix 
 dataset=np.array(embedded_docs[0:128])
 embedding_vector_features=64
 
+#####################
+# MODEL DEFINITION
+#####################
 
 inputs=keras.layers.Input(shape=(20,))
-#x=keras.layers.Embedding(voc_size,embedding_vector_features, input_length=sent_length)(inputs)
-#x=keras.layers.GlobalMaxPooling1D()(x)
 x=keras.layers.Dense(64,activation='relu')(inputs)
 x=keras.layers.Dense(20,activation='relu')(x)
 x=keras.layers.Dense(1,activation='sigmoid')(x)
@@ -76,6 +78,9 @@ len(embedded_docs),y.shape
 x_final=np.array(embedded_docs)
 y_final=np.array(y)
 
+##############################
+#      MODEL TRAINING
+##############################
 
 print(x_final.shape,y_final.shape)
 x_train, x_test, y_train, y_test = train_test_split(x_final, y_final, test_size=0.33, random_state=42)
@@ -86,13 +91,15 @@ print('____________________________________________\n')
 print('\n    Accuracy = ',accuracy_score(y_test,y_pred))
 print('\n____________________________________________\n')
 
+##############################
+#     MODEL QUANTIZATION
+##############################
 
-
-model.save('float_model.h5')
+model.save('float_model_no_embeddinh.h5')
 quantizer = vitis_quantize.VitisQuantizer(model)
 quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=True, cle_steps=10, include_fast_ft=True)
 # saved quantized model
-quantized_model.save('quantized_model.h5')
+quantized_model.save('quantized_model_no_embedding.h5')
 print('Saved quantized model')
 
 #quantized_model = keras.models.load_model(quantized_model)
@@ -103,23 +110,3 @@ y_pred=(quantized_model.predict(x_test) > 0.5).astype("int32")
 print('____________________________________________\n')
 print('\n Quantized accuracy = ',accuracy_score(y_test,y_pred))
 print('\n____________________________________________\n')
-
-
-# Evaluate Quantized Model
-#uantized_model.compile(
-#    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-#    metrics=['sparse_categorical_accuracy'])
-#quantized_model.evaluate(test_images, test_labels, batch_size=500)
-
-# Dump Quantized Model
-#quantizer.dump_model(
-#    quantized_model, dataset=train_images[0:1], dump_float=True)
-
-
-
-
-
-#y_pred=np.argmax(model.predict(x_test),axis=1)
-
-#confusion_matrix(y_test,y_pred)
-#print(accuracy_score(y_test,y_pred))
