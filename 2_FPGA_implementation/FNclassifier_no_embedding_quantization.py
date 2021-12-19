@@ -95,7 +95,7 @@ print('\n____________________________________________\n')
 #     MODEL QUANTIZATION
 ##############################
 
-model.save('float_model_no_embeddinh.h5')
+model.save('float_model_no_embedding.h5')
 quantizer = vitis_quantize.VitisQuantizer(model)
 quantized_model = quantizer.quantize_model(calib_dataset=dataset, include_cle=True, cle_steps=10, include_fast_ft=True)
 # saved quantized model
