@@ -1,8 +1,0 @@
-{
-    "lib": "libvart-dpu-runner.so",
-    "filename": "FakeNewsDetection.xmodel",
-    "kernel": [
-        "subgraph_quant_dense(TransferMatMulToConv2d)"
-    ],
-    "target": "DPUCZDX8G_ISA0_B4096_MAX_BG2"
-}
